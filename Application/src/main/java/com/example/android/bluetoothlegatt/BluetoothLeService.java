@@ -153,22 +153,22 @@ public class BluetoothLeService extends Service {
                     if (key.equals("0")) {
                         // mmHg
                         Log.d(TAG, "mmHg");
-                      //  bundle.putString(KEY_UNIT, "mmHg");
+                        intent.putExtra(SampleGattAttributes.KEY_UNIT, "mmHg");
                     } else {
                         // kPa
                         Log.d(TAG, "kPa");
-                      //  bundle.putString(KEY_UNIT, "kPa");
+                        intent.putExtra(SampleGattAttributes.KEY_UNIT, "kPa");
                     }
                     // Unit
                     offset += 1;
                     Log.d(TAG, "Systolic :" + String.format("%f", characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset)));
-                 //   bundle.putFloat(KEY_SYSTOLIC, characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset));
+                    intent.putExtra(SampleGattAttributes.KEY_SYSTOLIC, characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset));
                     offset += 2;
                     Log.d(TAG, "Diastolic :" + String.format("%f", characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset)));
-                 //   bundle.putFloat(KEY_DIASTOLIC, characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset));
+                    intent.putExtra(SampleGattAttributes.KEY_DIASTOLIC, characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset));
                     offset += 2;
                     Log.d(TAG, "Mean Arterial Pressure :" + String.format("%f", characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset)));
-                  //  bundle.putFloat(KEY_MEAS_ARTERIAL_PRESSURE, characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset));
+                    intent.putExtra(SampleGattAttributes.KEY_MEAS_ARTERIAL_PRESSURE, characteristic.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, offset));
                     offset += 2;
                 }
 
@@ -259,6 +259,7 @@ public class BluetoothLeService extends Service {
      *         callback.
      */
     public boolean connect(final String address) {
+        Log.i(TAG,"Going to connect with "+address);
         if (mBluetoothAdapter == null || address == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
@@ -353,7 +354,7 @@ public class BluetoothLeService extends Service {
         if (UUID_BP_MEASUREMENT.equals(characteristic.getUuid())) {
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
                     UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
         }
     }

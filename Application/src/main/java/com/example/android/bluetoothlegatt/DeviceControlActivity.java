@@ -109,7 +109,13 @@ public class DeviceControlActivity extends Activity {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                String sys = String.valueOf(intent.getFloatExtra(SampleGattAttributes.KEY_SYSTOLIC,0));
+                String dia = String.valueOf(intent.getFloatExtra(SampleGattAttributes.KEY_DIASTOLIC,0));
+                String pulse = String.valueOf(intent.getFloatExtra(SampleGattAttributes.KEY_MEAS_ARTERIAL_PRESSURE,0));
+                String unit =intent.getStringExtra(SampleGattAttributes.KEY_UNIT);
+
+                displayData("Result is "+sys+" / "+dia+" "+pulse+" "+unit);
+              //  displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             }
         }
     };
